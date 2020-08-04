@@ -179,7 +179,7 @@ char * keyToString (CGKeyCode keyCode) {
       case  51:
             if (textMode) {
                 complete = true;
-                return "<del>";
+                return "<D>";
             }else{
                 return "<delete>";
             }
@@ -188,7 +188,7 @@ char * keyToString (CGKeyCode keyCode) {
             if (textMode) {
                 cmd = !cmd;
                 complete = true;
-                return "<command>";
+                return "<C>";
             }else{
                 return "<command>";
             }
@@ -356,6 +356,36 @@ int main(int argc, const char *argv[]) {
     // Get the current time and open the logfile.
     time_t result = time(NULL);
     logfile = fopen(PATH, "a");
+
+    // Clear the logfile if clear argument used or log to specific file if given.
+    if(argc == 2) {
+        if(strcmp(argv[1], "clear") == 0) {
+            fopen(PATH, "w");
+            printf("%s cleared.\n", PATH);
+            fflush(stdout);
+            exit(1);
+        }
+        else if(strcmp(argv[1], "open") == 0){
+            FILE *f = fopen(PATH, "r");
+            if(!f)
+            {
+              fprintf(stderr, "ERROR: Unable to open log file. Ensure that you have the proper permissions.\n");
+              exit(1);
+            }
+            char s;
+            do
+            {
+              s = getc(f);
+              printf("%c",s);
+            }
+            while(s!=EOF);
+            fclose(f);
+            exit(1);
+        }
+        else {
+            logfile = fopen(argv[1], "a");
+        }
+    }
 
     if (!logfile) {
         fprintf(stderr, "ERROR: Unable to open log file. Ensure that you have the proper permissions.\n");

